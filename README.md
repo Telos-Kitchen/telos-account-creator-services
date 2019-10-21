@@ -34,8 +34,8 @@ Once you have completed integration testing, you may apply for a production API 
 This request will send an SMS one-time passcode (Telos Enrollment Code) to the SMS number provided. 
 ```
 curl -X POST \
-  https://dev.accounts.telosapi.com/register \
-  -H 'x-api-key: ABK19jhYsW12Wny6LglV895szlG2QtOHang93J1T' \
+  https://dev.api.telosapi.com/v1/registrations \
+  -H 'x-api-key: BQoDqqyTpG1zriwiwwBZ62nZnVcCI9KQ1j1qUSJc' \
   -d '{
 	"smsNumber": "<smsNumber>"
 }  '
@@ -46,8 +46,8 @@ This request confirms the enrollment code and creates the account based on the a
 
 ```
 curl -X POST \
-  https://dev.accounts.telosapi.com/create \
-  -H 'x-api-key: ABK19jhYsW12Wny6LglV895szlG2QtOHang93J1T' \
+  https://dev.api.telosapi.com/v1/accounts \
+  -H 'x-api-key: BQoDqqyTpG1zriwiwwBZ62nZnVcCI9KQ1j1qUSJc' \
   -d '{
     "smsNumber": "<smsNumber>",
     "smsOtp": "<telosEnrollmentCode>",
@@ -80,7 +80,7 @@ Clients can use this web service to check if requested Telos accounts have the r
 
 ```
 curl \
-https://dev.accounts.telosapi.com/check\?telosAccount\=invalidname9
+https://dev.api.telosapi.com/v1/accounts/invalidname9
 ```
 
 The first check is whether the account is the correct format. Since the name ```invalidname9``` is not valid, the service returns ```HTTP 400``` and the following message.
@@ -90,14 +90,14 @@ The first check is whether the account is the correct format. Since the name ```
 }
 ```
 
-If the requested name is the correct format, the service will then check to see if it is available. If it is not available, the service returns ```HTTP 400``` and the following message:
+If the requested name is the correct format, the service will then check to see if it is available. If it is not available, the service returns ```HTTP 200``` (Account Exists) and the following message:
 ```
 {
     "message": "Requested Telos account name teloskitchen already exists."
 }
 ```
 
-If both checks pass, the service returns ```HTTP 200``` and the following message.
+If both checks pass, the service returns ```HTTP 404``` (Not Found) and the following message.
 ```
 {
     "message": "Requested Telos account name solidaccount is valid and available."
@@ -108,7 +108,7 @@ If both checks pass, the service returns ```HTTP 200``` and the following messag
 It is recommended that clients use a local library to generate key pairs and pass the public key to one of the services above. However, clients may use a service that we provide. 
 
 ```
-curl https://dev.accounts.telosapi.com/keygen
+curl https://dev.api.telosapi.com/v1/keys
 ```
 
 Reponse: 
@@ -133,7 +133,7 @@ Reponse:
 The default number of keys to generate is two (2).  A client can pass an optional query string parameter ```numKeys``` to generate more or less.
 
 ```
-curl https://dev.accounts.telosapi.com/keygen\?numKeys\=4
+curl https://dev.api.telosapi.com/v1/keys\?numKeys\=4
 ```
 
 Four keys in ```keys``` array in response:
@@ -169,9 +169,9 @@ However, during testing, developers will obviously want to use their number mult
 
 You may delete an SMS number from the used hash table like this: 
 ```
-curl -X POST \
-  https://dev.accounts.telosapi.com/delete \
-  -H 'x-api-key: ABK19jhYsW12Wny6LglV895szlG2QtOHang93J1T' \
+curl -X DELETE \
+  https://dev.api.telosapi.com/v1/accounts \
+  -H 'x-api-key: BQoDqqyTpG1zriwiwwBZ62nZnVcCI9KQ1j1qUSJc' \
   -d '{
 	"smsNumber": "<smsNumber>"
 }  '
