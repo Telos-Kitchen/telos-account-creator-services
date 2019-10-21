@@ -76,11 +76,12 @@ The client may also request that the ```private key``` that is generated be sent
 
 ## Utilities
 ### Account Checker
-Clients can use this web service to check if requested Telos accounts have the right format and are available. This endpoint does not require the API key. 
+Clients can use this web service to check if requested Telos accounts have the right format and are available. 
 
 ```
 curl \
-https://dev.api.telosapi.com/v1/accounts/invalidname9
+https://dev.api.telosapi.com/v1/accounts/invalidname9 \
+  -H 'x-api-key: BQoDqqyTpG1zriwiwwBZ62nZnVcCI9KQ1j1qUSJc' 
 ```
 
 The first check is whether the account is the correct format. Since the name ```invalidname9``` is not valid, the service returns ```HTTP 400``` and the following message.
@@ -108,7 +109,8 @@ If both checks pass, the service returns ```HTTP 404``` (Not Found) and the foll
 It is recommended that clients use a local library to generate key pairs and pass the public key to one of the services above. However, clients may use a service that we provide. 
 
 ```
-curl https://dev.api.telosapi.com/v1/keys
+curl https://dev.api.telosapi.com/v1/keys \
+  -H 'x-api-key: BQoDqqyTpG1zriwiwwBZ62nZnVcCI9KQ1j1qUSJc' 
 ```
 
 Reponse: 
@@ -133,7 +135,8 @@ Reponse:
 The default number of keys to generate is two (2).  A client can pass an optional query string parameter ```numKeys``` to generate more or less.
 
 ```
-curl https://dev.api.telosapi.com/v1/keys\?numKeys\=4
+curl https://dev.api.telosapi.com/v1/keys\?numKeys\=4 \
+  -H 'x-api-key: BQoDqqyTpG1zriwiwwBZ62nZnVcCI9KQ1j1qUSJc' 
 ```
 
 Four keys in ```keys``` array in response:
