@@ -16,8 +16,9 @@ export async function main(event, context) {
   }
 
   if ( (data.sendPrivateKeyViaSms && data.sendPrivateKeyViaSms === "Y") && 
-    (!data.generateKeys || data.generateKeys !== "Y" )) {
-      return respond(400, { message: "sendPrivateKeyViaSms parameter can only be used if generateKeys is set to Y"});
+      ((!data.generateKeys || data.generateKeys !== "Y" ) && 
+       (!data.privateKey))) {
+      return respond(400, { message: "sendPrivateKeyViaSms parameter can only be used if generateKeys is set to Y or the client passes the privateKey directly"});
   }
 
   try {
@@ -68,7 +69,13 @@ export async function main(event, context) {
     result = await eosioLib.create (accountRecord.telosAccount, accountRecord.ownerKey, accountRecord.activeKey);
 
     if (data.sendPrivateKeyViaSms && data.sendPrivateKeyViaSms === "Y") {
-      const msg = await sendLib.genSendSMS(smsNumber, `The private key for Telos account ${accountRecord.telosAccount} is ${keyPair.privateKey}. Ensure that you keep this safe.`);
+      let privateKey;
+      if (data.privateKey) {
+        privateKey = data.privateKey;
+      } else {
+        privateKey = keyPair.privateKey;
+      }
+      const msg = await sendLib.genSendSMS(smsNumber, `Important: Keep in a safe place: ${privateKey}`);
       accountRecord.pkSid = msg.sid;
       message = message + ` Private key was also sent via SMS. SID: ${msg.sid}.`;
     }

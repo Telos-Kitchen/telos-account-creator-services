@@ -3,7 +3,6 @@ const { JsSignatureProvider } = require("eosjs/dist/eosjs-jssig");
 const fetch = require("node-fetch"); // node only; not needed in browsers
 const { TextEncoder, TextDecoder } = require("util");
 import { getSecret } from "./auth-lib";
-import { generateKeyPair } from "crypto";
 
 export async function create(accountName, ownerKey, activeKey) {
 
@@ -12,9 +11,6 @@ export async function create(accountName, ownerKey, activeKey) {
   const pk = secretStringObj[process.env.tkOracleSecretKey];
 
   const signatureProvider = new JsSignatureProvider([pk]);
-  console.log (process.env.eosioApiEndPoint);
-  console.log (pk);
-
   const rpc = new JsonRpc(process.env.eosioApiEndPoint, { fetch } );
 
   const api = new Api({
