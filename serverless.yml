@@ -19,7 +19,7 @@ custom:
   tableName: ${self:custom.stage}-accounts
   # Set our DynamoDB throughput for prod and all other non-prod stages.
   tableThroughputs:
-    prod: 5
+    prod: 2
     default: 1
   tableThroughput: ${self:custom.tableThroughputs.${self:custom.stage}, self:custom.tableThroughputs.default}
   webpack:
@@ -34,6 +34,7 @@ provider:
   apiKeys:
     - ${self:custom.stage}-standard
     - ${self:custom.stage}-telosWallet
+    - ${self:custom.stage}-dswallet
   usagePlan:
     quota:
       limit: 1500
