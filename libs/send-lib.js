@@ -18,7 +18,7 @@ export async function cleanNumberFormat (smsNumber) {
             numberLookupResult = phone_number;
         }); 
     
-    if (numberLookupResult.addOns.results.twilio_carrier_info.result.carrier.type === "voip") {
+    if (numberLookupResult.addOns && numberLookupResult.addOns.results.twilio_carrier_info.result.carrier.type === "voip") {
         throw VoipError(`Service does not support numbers from your carrier: ${numberLookupResult.addOns.results.twilio_carrier_info.result.carrier.name}`,
             numberLookupResult.addOns.results.twilio_carrier_info.result);
     }
